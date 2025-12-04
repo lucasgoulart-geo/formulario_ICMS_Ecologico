@@ -99,6 +99,16 @@
                     <p id="errorCpf" class="hidden mt-1 text-sm text-red-500"></p>
                 </div>
 
+                <!-- Telefone -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-primary">
+                        Telefone <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="telefone" placeholder="(21) 99999-9999" maxlength="15"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                    <p id="errorTelefone" class="hidden mt-1 text-sm text-red-500"></p>
+                </div>
+
                 <!-- E-mail -->
                 <div>
                     <label class="block text-sm font-semibold mb-2 text-primary">
@@ -133,7 +143,8 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVhs_vXc5VLsctSDF1KF4_PlLNO45TQL_bq8TH1WgBcXZ2HveK0WFnfqoaJB1SFhsy/exec';
+        // COLOQUE A SUA URL DO GOOGLE APPS SCRIPT AQUI
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1QVI2axcjqFR9_BYso6LoGKtzpFay80RxqbNYRRLNgBvePRZUU1a8_b3y-pIiJgiU/exec';
         
         const municipios = ["Angra dos Reis", "Aperibé", "Araruama", "Areal", "Armação dos Búzios", "Arraial do Cabo", "Barra do Piraí", "Barra Mansa", "Belford Roxo", "Bom Jardim", "Bom Jesus do Itabapoana", "Cabo Frio", "Cachoeiras de Macacu", "Cambuci", "Carapebus", "Comendador Levy Gasparian", "Campos dos Goytacazes", "Cantagalo", "Cardoso Moreira", "Carmo", "Casimiro de Abreu", "Conceição de Macabu", "Cordeiro", "Duas Barras", "Duque de Caxias", "Engenheiro Paulo de Frontin", "Guapimirim", "Iguaba Grande", "Itaboraí", "Itaguaí", "Italva", "Itaocara", "Itaperuna", "Itatiaia", "Japeri", "Laje do Muriaé", "Macaé", "Macuco", "Magé", "Mangaratiba", "Maricá", "Mendes", "Mesquita", "Miguel Pereira", "Miracema", "Natividade", "Nilópolis", "Niterói", "Nova Friburgo", "Nova Iguaçu", "Paracambi", "Paraíba do Sul", "Paraty", "Paty do Alferes", "Petrópolis", "Pinheiral", "Piraí", "Porciúncula", "Porto Real", "Quatis", "Queimados", "Quissamã", "Resende", "Rio Bonito", "Rio Claro", "Rio das Flores", "Rio das Ostras", "Rio de Janeiro", "Santa Maria Madalena", "Santo Antônio de Pádua", "São Francisco de Itabapoana", "São Fidélis", "São Gonçalo", "São João da Barra", "São João de Meriti", "São José de Ubá", "São José do Vale do Rio Preto", "São Pedro da Aldeia", "São Sebastião do Alto", "Sapucaia", "Saquarema", "Seropédica", "Silva Jardim", "Sumidouro", "Tanguá", "Teresópolis", "Trajano de Moraes", "Três Rios", "Valença", "Varre-Sai", "Vassouras", "Volta Redonda"];
         
@@ -175,12 +186,28 @@
             });
         }
 
+        // Formatação CPF
         document.getElementById('cpf').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length <= 11) {
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
                 value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            }
+            e.target.value = value;
+        });
+
+        // Formatação Telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                } else {
+                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                }
             }
             e.target.value = value;
         });
@@ -222,6 +249,11 @@
             return digit === parseInt(numbers.charAt(10));
         }
 
+        function validateTelefone(telefone) {
+            const numbers = telefone.replace(/\D/g, '');
+            return numbers.length === 10 || numbers.length === 11;
+        }
+
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
@@ -246,6 +278,7 @@
             const nomeCompleto = document.getElementById('nomeCompleto').value.trim();
             const cargo = document.getElementById('cargo').value.trim();
             const cpf = document.getElementById('cpf').value;
+            const telefone = document.getElementById('telefone').value;
             const email = document.getElementById('email').value.trim();
 
             let hasError = false;
@@ -274,6 +307,12 @@
                 hasError = true;
             }
 
+            if (!validateTelefone(telefone)) {
+                document.getElementById('errorTelefone').textContent = 'Telefone inválido';
+                document.getElementById('errorTelefone').classList.remove('hidden');
+                hasError = true;
+            }
+
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 document.getElementById('errorEmail').textContent = 'E-mail inválido';
                 document.getElementById('errorEmail').classList.remove('hidden');
@@ -296,7 +335,7 @@
             form.action = SCRIPT_URL;
             form.target = 'hidden_iframe';
             
-            const fields = { municipio, nomeCompleto, cargo, cpf, email };
+            const fields = { municipio, nomeCompleto, cargo, cpf, telefone, email };
             for (const [key, value] of Object.entries(fields)) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -321,6 +360,7 @@
                 document.getElementById('nomeCompleto').value = '';
                 document.getElementById('cargo').value = '';
                 document.getElementById('cpf').value = '';
+                document.getElementById('telefone').value = '';
                 document.getElementById('email').value = '';
                 document.getElementById('municipio').value = '';
                 document.getElementById('representanteFields').classList.add('hidden');
