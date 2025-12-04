@@ -137,19 +137,19 @@
         <!-- Aviso Final -->
         <div class="mt-6 p-4 rounded-lg bg-secondary">
             <p class="text-sm text-primary">
-                <strong>Atenção:</strong> Cada município pode cadastrar de 1 até 3 representantes. Os e-mails não podem ser repetidos.
+                <strong>Atenção:</strong> Cada município pode cadastrar de 1 até 3 representantes. Os CPFs não podem ser repetidos.
             </p>
         </div>
     </div>
 
     <script>
         // COLOQUE A SUA URL DO GOOGLE APPS SCRIPT AQUI
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1QVI2axcjqFR9_BYso6LoGKtzpFay80RxqbNYRRLNgBvePRZUU1a8_b3y-pIiJgiU/exec';
+        const SCRIPT_URL = 'COLE_SUA_URL_AQUI';
         
         const municipios = ["Angra dos Reis", "Aperibé", "Araruama", "Areal", "Armação dos Búzios", "Arraial do Cabo", "Barra do Piraí", "Barra Mansa", "Belford Roxo", "Bom Jardim", "Bom Jesus do Itabapoana", "Cabo Frio", "Cachoeiras de Macacu", "Cambuci", "Carapebus", "Comendador Levy Gasparian", "Campos dos Goytacazes", "Cantagalo", "Cardoso Moreira", "Carmo", "Casimiro de Abreu", "Conceição de Macabu", "Cordeiro", "Duas Barras", "Duque de Caxias", "Engenheiro Paulo de Frontin", "Guapimirim", "Iguaba Grande", "Itaboraí", "Itaguaí", "Italva", "Itaocara", "Itaperuna", "Itatiaia", "Japeri", "Laje do Muriaé", "Macaé", "Macuco", "Magé", "Mangaratiba", "Maricá", "Mendes", "Mesquita", "Miguel Pereira", "Miracema", "Natividade", "Nilópolis", "Niterói", "Nova Friburgo", "Nova Iguaçu", "Paracambi", "Paraíba do Sul", "Paraty", "Paty do Alferes", "Petrópolis", "Pinheiral", "Piraí", "Porciúncula", "Porto Real", "Quatis", "Queimados", "Quissamã", "Resende", "Rio Bonito", "Rio Claro", "Rio das Flores", "Rio das Ostras", "Rio de Janeiro", "Santa Maria Madalena", "Santo Antônio de Pádua", "São Francisco de Itabapoana", "São Fidélis", "São Gonçalo", "São João da Barra", "São João de Meriti", "São José de Ubá", "São José do Vale do Rio Preto", "São Pedro da Aldeia", "São Sebastião do Alto", "Sapucaia", "Saquarema", "Seropédica", "Silva Jardim", "Sumidouro", "Tanguá", "Teresópolis", "Trajano de Moraes", "Três Rios", "Valença", "Varre-Sai", "Vassouras", "Volta Redonda"];
         
         let municipioData = {};
-        let allEmails = [];
+        let allCPFs = [];
 
         async function loadData() {
             try {
@@ -158,7 +158,7 @@
                 
                 if (data.status === 'success') {
                     municipioData = data.municipios || {};
-                    allEmails = data.emails || [];
+                    allCPFs = data.cpfs || [];
                 }
                 
                 populateMunicipios();
@@ -305,6 +305,10 @@
                 document.getElementById('errorCpf').textContent = 'CPF inválido';
                 document.getElementById('errorCpf').classList.remove('hidden');
                 hasError = true;
+            } else if (allCPFs.includes(cpf.replace(/\D/g, ''))) {
+                document.getElementById('errorCpf').textContent = 'Este CPF já foi cadastrado';
+                document.getElementById('errorCpf').classList.remove('hidden');
+                hasError = true;
             }
 
             if (!validateTelefone(telefone)) {
@@ -315,12 +319,6 @@
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 document.getElementById('errorEmail').textContent = 'E-mail inválido';
-                document.getElementById('errorEmail').classList.remove('hidden');
-                hasError = true;
-            }
-
-            if (allEmails.includes(email.toLowerCase())) {
-                document.getElementById('errorEmail').textContent = 'Este e-mail já foi cadastrado';
                 document.getElementById('errorEmail').classList.remove('hidden');
                 hasError = true;
             }
