@@ -18,11 +18,11 @@
         <!-- Logo e Cabeçalho -->
         <div class="text-center mb-8">
             <div class="mb-4 flex justify-center">
-                <<img src="Logo_ICMS.png" alt="ICMS Ecológico Logo" class="h-32 object-contain">>
+                <img src="Logo_ICMS.png" alt="ICMS Ecológico Logo" class="h-32 object-contain">
             </div>
             <h1 class="text-3xl font-bold mb-2 text-primary">ICMS Ecológico - 2025</h1>
             <p class="text-gray-600 text-sm leading-relaxed">
-                Formulário para inscrição para o evento da premiação na gestão ambiental municipal - ICMS Ecológico 2025
+                Formulário para inscrição no Evento de Premiação da Gestão Ambiental Municipal - ICMS Ecológico 2025 - AF 2026.
             </p>
             <p class="text-gray-500 text-sm mt-2"><strong>Data:</strong> A confirmar</p>
             <p class="text-sm mt-3 font-medium text-primary">Cada município pode inscrever até 3 representantes</p>
@@ -99,16 +99,6 @@
                     <p id="errorCpf" class="hidden mt-1 text-sm text-red-500"></p>
                 </div>
 
-                <!-- Telefone -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-primary">
-                        Telefone <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="telefone" placeholder="(21) 99999-9999" maxlength="15"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
-                    <p id="errorTelefone" class="hidden mt-1 text-sm text-red-500"></p>
-                </div>
-
                 <!-- E-mail -->
                 <div>
                     <label class="block text-sm font-semibold mb-2 text-primary">
@@ -137,20 +127,19 @@
         <!-- Aviso Final -->
         <div class="mt-6 p-4 rounded-lg bg-secondary">
             <p class="text-sm text-primary">
-                <strong>Atenção:</strong> Cada município pode cadastrar de 1 até 3 representantes. Os CPFs não podem ser repetidos.
+                <strong>Atenção:</strong> Cada município pode cadastrar de 1 até 3 representantes. Os e-mails não podem ser repetidos.
             </p>
         </div>
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjUSU1V0mVPEFBFYt1qk5JR77bypEkWWzM7phSpm_i1JJosKkTWWlUD1NoQ5IRmzk/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-fED17ErM1RTVwYpuhTEytR_trZoYWUcRdQBH4nN-lnVeptQl-DePDWetFF5QiUrf/exec';
         
         const municipios = ["Angra dos Reis", "Aperibé", "Araruama", "Areal", "Armação dos Búzios", "Arraial do Cabo", "Barra do Piraí", "Barra Mansa", "Belford Roxo", "Bom Jardim", "Bom Jesus do Itabapoana", "Cabo Frio", "Cachoeiras de Macacu", "Cambuci", "Carapebus", "Comendador Levy Gasparian", "Campos dos Goytacazes", "Cantagalo", "Cardoso Moreira", "Carmo", "Casimiro de Abreu", "Conceição de Macabu", "Cordeiro", "Duas Barras", "Duque de Caxias", "Engenheiro Paulo de Frontin", "Guapimirim", "Iguaba Grande", "Itaboraí", "Itaguaí", "Italva", "Itaocara", "Itaperuna", "Itatiaia", "Japeri", "Laje do Muriaé", "Macaé", "Macuco", "Magé", "Mangaratiba", "Maricá", "Mendes", "Mesquita", "Miguel Pereira", "Miracema", "Natividade", "Nilópolis", "Niterói", "Nova Friburgo", "Nova Iguaçu", "Paracambi", "Paraíba do Sul", "Paraty", "Paty do Alferes", "Petrópolis", "Pinheiral", "Piraí", "Porciúncula", "Porto Real", "Quatis", "Queimados", "Quissamã", "Resende", "Rio Bonito", "Rio Claro", "Rio das Flores", "Rio das Ostras", "Rio de Janeiro", "Santa Maria Madalena", "Santo Antônio de Pádua", "São Francisco de Itabapoana", "São Fidélis", "São Gonçalo", "São João da Barra", "São João de Meriti", "São José de Ubá", "São José do Vale do Rio Preto", "São Pedro da Aldeia", "São Sebastião do Alto", "Sapucaia", "Saquarema", "Seropédica", "Silva Jardim", "Sumidouro", "Tanguá", "Teresópolis", "Trajano de Moraes", "Três Rios", "Valença", "Varre-Sai", "Vassouras", "Volta Redonda"];
         
         let municipioData = {};
-        let allCPFs = [];
+        let allEmails = [];
 
-        // Carregar dados iniciais
         async function loadData() {
             try {
                 const response = await fetch(SCRIPT_URL);
@@ -158,7 +147,7 @@
                 
                 if (data.status === 'success') {
                     municipioData = data.municipios || {};
-                    allCPFs = data.cpfs || [];
+                    allEmails = data.emails || [];
                 }
                 
                 populateMunicipios();
@@ -186,7 +175,6 @@
             });
         }
 
-        // Formatação CPF
         document.getElementById('cpf').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length <= 11) {
@@ -197,24 +185,6 @@
             e.target.value = value;
         });
 
-        // Formatação Telefone
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                if (value.length <= 10) {
-                    // Formato: (XX) XXXX-XXXX
-                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                } else {
-                    // Formato: (XX) XXXXX-XXXX
-                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                }
-            }
-            e.target.value = value;
-        });
-
-        // Mostrar/ocultar campos ao selecionar município
         document.getElementById('municipio').addEventListener('change', function() {
             const municipio = this.value;
             const fields = document.getElementById('representanteFields');
@@ -235,7 +205,6 @@
             }
         });
 
-        // Validação CPF
         function validateCPF(cpf) {
             const numbers = cpf.replace(/\D/g, '');
             if (numbers.length !== 11 || /^(\d)\1{10}$/.test(numbers)) return false;
@@ -253,12 +222,6 @@
             return digit === parseInt(numbers.charAt(10));
         }
 
-        // Validação Telefone
-        function validateTelefone(telefone) {
-            const numbers = telefone.replace(/\D/g, '');
-            return numbers.length === 10 || numbers.length === 11;
-        }
-
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
@@ -273,9 +236,7 @@
             setTimeout(() => successDiv.classList.add('hidden'), 5000);
         }
 
-        // Submit
         document.getElementById('submitBtn').addEventListener('click', async function() {
-            // Limpar erros
             document.querySelectorAll('[id^="error"]').forEach(el => {
                 el.classList.add('hidden');
                 el.textContent = '';
@@ -285,7 +246,6 @@
             const nomeCompleto = document.getElementById('nomeCompleto').value.trim();
             const cargo = document.getElementById('cargo').value.trim();
             const cpf = document.getElementById('cpf').value;
-            const telefone = document.getElementById('telefone').value;
             const email = document.getElementById('email').value.trim();
 
             let hasError = false;
@@ -312,16 +272,6 @@
                 document.getElementById('errorCpf').textContent = 'CPF inválido';
                 document.getElementById('errorCpf').classList.remove('hidden');
                 hasError = true;
-            } else if (allCPFs.includes(cpf.replace(/\D/g, ''))) {
-                document.getElementById('errorCpf').textContent = 'Este CPF já foi cadastrado';
-                document.getElementById('errorCpf').classList.remove('hidden');
-                hasError = true;
-            }
-
-            if (!validateTelefone(telefone)) {
-                document.getElementById('errorTelefone').textContent = 'Telefone inválido';
-                document.getElementById('errorTelefone').classList.remove('hidden');
-                hasError = true;
             }
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -330,19 +280,23 @@
                 hasError = true;
             }
 
+            if (allEmails.includes(email.toLowerCase())) {
+                document.getElementById('errorEmail').textContent = 'Este e-mail já foi cadastrado';
+                document.getElementById('errorEmail').classList.remove('hidden');
+                hasError = true;
+            }
+
             if (hasError) return;
 
-            // Enviar
             this.disabled = true;
             this.textContent = 'Enviando...';
 
-            // Usar form submission com iframe para evitar CORS
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = SCRIPT_URL;
             form.target = 'hidden_iframe';
             
-            const fields = { municipio, nomeCompleto, cargo, cpf, telefone, email };
+            const fields = { municipio, nomeCompleto, cargo, cpf, email };
             for (const [key, value] of Object.entries(fields)) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -353,7 +307,6 @@
             
             document.body.appendChild(form);
             
-            // Criar iframe oculto
             let iframe = document.getElementById('hidden_iframe');
             if (!iframe) {
                 iframe = document.createElement('iframe');
@@ -363,13 +316,11 @@
                 document.body.appendChild(iframe);
             }
             
-            // Handler de sucesso
             iframe.onload = () => {
                 showSuccess();
                 document.getElementById('nomeCompleto').value = '';
                 document.getElementById('cargo').value = '';
                 document.getElementById('cpf').value = '';
-                document.getElementById('telefone').value = '';
                 document.getElementById('email').value = '';
                 document.getElementById('municipio').value = '';
                 document.getElementById('representanteFields').classList.add('hidden');
@@ -384,7 +335,6 @@
             form.submit();
         });
 
-        // Inicializar
         loadData();
     </script>
 </body>
