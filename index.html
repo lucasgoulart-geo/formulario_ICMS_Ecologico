@@ -25,7 +25,6 @@
                 Formulário para inscrição no Evento de Premiação da Gestão Ambiental Municipal - ICMS Ecológico 2025 - AF 2026.
             </p>
             <p class="text-gray-500 text-sm mt-2"><strong>Data:</strong> A confirmar</p>
-            <p class="text-sm mt-3 font-medium text-primary">Cada município pode inscrever até 3 representantes</p>
         </div>
 
         <!-- Loading -->
@@ -52,20 +51,38 @@
 
         <!-- Formulário -->
         <div id="formContainer" class="hidden space-y-6">
-            <!-- Município -->
+            <!-- Instruções -->
+            <div class="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                <p class="text-sm text-blue-800">
+                    <strong>Atenção:</strong> Para representantes municipais, selecione o seu município de competência. Caso não represente município, selecione a opção <strong>"Instituição"</strong>.
+                </p>
+            </div>
+
+            <!-- Município ou Instituição -->
             <div>
                 <label class="block text-sm font-semibold mb-2 text-primary">
-                    Município <span class="text-red-500">*</span>
+                    Município ou Instituição <span class="text-red-500">*</span>
                 </label>
                 <select id="municipio" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
-                    <option value="">Selecione o município</option>
+                    <option value="">Selecione</option>
+                    <option value="Instituição">Instituição</option>
                 </select>
                 <p id="errorMunicipio" class="hidden mt-1 text-sm text-red-500"></p>
             </div>
 
+            <!-- Campo Instituição (aparece só quando seleciona "Instituição") -->
+            <div id="campoInstituicao" class="hidden">
+                <label class="block text-sm font-semibold mb-2 text-primary">
+                    Nome da Instituição <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="nomeInstituicao" placeholder="Ex: Instituto Estadual do Ambiente - INEA" 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                <p id="errorInstituicao" class="hidden mt-1 text-sm text-red-500"></p>
+            </div>
+
             <!-- Campos do Representante -->
             <div id="representanteFields" class="hidden">
-                <div class="border-t pt-6 bg-secondary">
+                <div class="border-t pt-6" style="border-color: #d6d8de;">
                     <h3 class="text-lg font-semibold mb-4 text-primary">Dados do Representante</h3>
                 </div>
 
@@ -99,16 +116,6 @@
                     <p id="errorCpf" class="hidden mt-1 text-sm text-red-500"></p>
                 </div>
 
-                <!-- Telefone -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-primary">
-                        Telefone <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="telefone" placeholder="(21) 99999-9999" maxlength="15"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
-                    <p id="errorTelefone" class="hidden mt-1 text-sm text-red-500"></p>
-                </div>
-
                 <!-- E-mail -->
                 <div>
                     <label class="block text-sm font-semibold mb-2 text-primary">
@@ -119,37 +126,38 @@
                     <p id="errorEmail" class="hidden mt-1 text-sm text-red-500"></p>
                 </div>
 
+                <!-- Checkbox LGPD -->
+                <div class="border-t pt-4" style="border-color: #d6d8de;">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="lgpdCheck" class="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-2">
+                        <span class="text-sm text-gray-700">
+                            Declaro que li e concordo com o tratamento dos meus dados pessoais fornecidos para a Secretaria Estadual do Ambiente e Sustentabilidade - SEAS, com a finalidade de realizar a inscrição ao evento do ICMS Ecológico. <span class="text-red-500">*</span>
+                        </span>
+                    </label>
+                    <p id="errorLgpd" class="hidden mt-2 text-sm text-red-500"></p>
+                </div>
+
                 <!-- Botão -->
-                <button id="submitBtn" class="w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-200 bg-primary hover:opacity-90 disabled:opacity-50">
+                <button id="submitBtn" class="w-full text-white font-semibold py-3 px-6 rounded-lg transition duration-200 bg-primary hover:opacity-90 disabled:opacity-50 mt-4">
                     Realizar Inscrição
                 </button>
-            </div>
-
-            <!-- Aviso Município Cheio -->
-            <div id="municipioFullWarning" class="hidden p-4 rounded-lg flex items-center gap-2" style="background-color: #fff3cd; border: 1px solid #ffc107; color: #856404;">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                </svg>
-                <span>Este município já atingiu o limite de 3 representantes cadastrados.</span>
             </div>
         </div>
 
         <!-- Aviso Final -->
         <div class="mt-6 p-4 rounded-lg bg-secondary">
             <p class="text-sm text-primary">
-                <strong>Atenção:</strong> Cada município pode cadastrar de 1 até 3 representantes. Os CPFs não podem ser repetidos.
+                <strong>Atenção:</strong> Os CPFs não podem ser repetidos. O e-mail pode ser compartilhado entre inscrições.
             </p>
         </div>
     </div>
 
     <script>
-        // COLOQUE A SUA URL DO GOOGLE APPS SCRIPT AQUI
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxN5jfqXS00uWNDRKf_xqplP2EZbUQocrYde_hIPa9ewUZcsFeIYzs4RUTU8mzkhwrK/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVua4iK963GJdEoltRnMWU2gNv8b9P4uglMeFwYErKwTzUTZLeOvjBEoBkxRQc1_Dx/exec';
         
         const municipios = ["Angra dos Reis", "Aperibé", "Araruama", "Areal", "Armação dos Búzios", "Arraial do Cabo", "Barra do Piraí", "Barra Mansa", "Belford Roxo", "Bom Jardim", "Bom Jesus do Itabapoana", "Cabo Frio", "Cachoeiras de Macacu", "Cambuci", "Carapebus", "Comendador Levy Gasparian", "Campos dos Goytacazes", "Cantagalo", "Cardoso Moreira", "Carmo", "Casimiro de Abreu", "Conceição de Macabu", "Cordeiro", "Duas Barras", "Duque de Caxias", "Engenheiro Paulo de Frontin", "Guapimirim", "Iguaba Grande", "Itaboraí", "Itaguaí", "Italva", "Itaocara", "Itaperuna", "Itatiaia", "Japeri", "Laje do Muriaé", "Macaé", "Macuco", "Magé", "Mangaratiba", "Maricá", "Mendes", "Mesquita", "Miguel Pereira", "Miracema", "Natividade", "Nilópolis", "Niterói", "Nova Friburgo", "Nova Iguaçu", "Paracambi", "Paraíba do Sul", "Paraty", "Paty do Alferes", "Petrópolis", "Pinheiral", "Piraí", "Porciúncula", "Porto Real", "Quatis", "Queimados", "Quissamã", "Resende", "Rio Bonito", "Rio Claro", "Rio das Flores", "Rio das Ostras", "Rio de Janeiro", "Santa Maria Madalena", "Santo Antônio de Pádua", "São Francisco de Itabapoana", "São Fidélis", "São Gonçalo", "São João da Barra", "São João de Meriti", "São José de Ubá", "São José do Vale do Rio Preto", "São Pedro da Aldeia", "São Sebastião do Alto", "Sapucaia", "Saquarema", "Seropédica", "Silva Jardim", "Sumidouro", "Tanguá", "Teresópolis", "Trajano de Moraes", "Três Rios", "Valença", "Varre-Sai", "Vassouras", "Volta Redonda"];
         
-        let municipioData = {};
-        let allCPFs = [];
+        let cpfsCadastrados = [];
 
         async function loadData() {
             try {
@@ -157,8 +165,7 @@
                 const data = await response.json();
                 
                 if (data.status === 'success') {
-                    municipioData = data.municipios || {};
-                    allCPFs = data.cpfs || [];
+                    cpfsCadastrados = data.cpfs || [];
                 }
                 
                 populateMunicipios();
@@ -172,21 +179,16 @@
 
         function populateMunicipios() {
             const select = document.getElementById('municipio');
-            select.innerHTML = '<option value="">Selecione o município</option>';
+            const instituicaoOption = select.querySelector('option[value="Instituição"]');
             
             municipios.forEach(mun => {
                 const option = document.createElement('option');
-                const count = municipioData[mun]?.count || 0;
-                const isFull = count >= 3;
-                
                 option.value = mun;
-                option.textContent = `${mun} ${isFull ? '🔒 Vagas Preenchidas (3/3)' : count > 0 ? `(${count}/3)` : ''}`;
-                option.disabled = isFull;
-                select.appendChild(option);
+                option.textContent = mun;
+                select.insertBefore(option, instituicaoOption);
             });
         }
 
-        // Formatação CPF
         document.getElementById('cpf').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length <= 11) {
@@ -197,38 +199,21 @@
             e.target.value = value;
         });
 
-        // Formatação Telefone
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                if (value.length <= 10) {
-                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                } else {
-                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                }
-            }
-            e.target.value = value;
-        });
-
         document.getElementById('municipio').addEventListener('change', function() {
-            const municipio = this.value;
+            const valor = this.value;
             const fields = document.getElementById('representanteFields');
-            const warning = document.getElementById('municipioFullWarning');
+            const campoInstituicao = document.getElementById('campoInstituicao');
             
-            if (municipio) {
-                const count = municipioData[municipio]?.count || 0;
-                if (count >= 3) {
-                    fields.classList.add('hidden');
-                    warning.classList.remove('hidden');
-                } else {
-                    fields.classList.remove('hidden');
-                    warning.classList.add('hidden');
-                }
+            if (valor === 'Instituição') {
+                campoInstituicao.classList.remove('hidden');
+                fields.classList.remove('hidden');
+            } else if (valor) {
+                campoInstituicao.classList.add('hidden');
+                document.getElementById('nomeInstituicao').value = '';
+                fields.classList.remove('hidden');
             } else {
+                campoInstituicao.classList.add('hidden');
                 fields.classList.add('hidden');
-                warning.classList.add('hidden');
             }
         });
 
@@ -247,11 +232,6 @@
             digit = 11 - (sum % 11);
             if (digit >= 10) digit = 0;
             return digit === parseInt(numbers.charAt(10));
-        }
-
-        function validateTelefone(telefone) {
-            const numbers = telefone.replace(/\D/g, '');
-            return numbers.length === 10 || numbers.length === 11;
         }
 
         function showError(message) {
@@ -274,18 +254,25 @@
                 el.textContent = '';
             });
 
-            const municipio = document.getElementById('municipio').value;
+            const municipioSelecionado = document.getElementById('municipio').value;
+            const nomeInstituicao = document.getElementById('nomeInstituicao').value.trim();
             const nomeCompleto = document.getElementById('nomeCompleto').value.trim();
             const cargo = document.getElementById('cargo').value.trim();
             const cpf = document.getElementById('cpf').value;
-            const telefone = document.getElementById('telefone').value;
             const email = document.getElementById('email').value.trim();
+            const lgpdCheck = document.getElementById('lgpdCheck').checked;
 
             let hasError = false;
 
-            if (!municipio) {
-                document.getElementById('errorMunicipio').textContent = 'Selecione um município';
+            if (!municipioSelecionado) {
+                document.getElementById('errorMunicipio').textContent = 'Selecione um município ou instituição';
                 document.getElementById('errorMunicipio').classList.remove('hidden');
+                hasError = true;
+            }
+
+            if (municipioSelecionado === 'Instituição' && !nomeInstituicao) {
+                document.getElementById('errorInstituicao').textContent = 'Nome da instituição é obrigatório';
+                document.getElementById('errorInstituicao').classList.remove('hidden');
                 hasError = true;
             }
 
@@ -305,15 +292,12 @@
                 document.getElementById('errorCpf').textContent = 'CPF inválido';
                 document.getElementById('errorCpf').classList.remove('hidden');
                 hasError = true;
-            } else if (allCPFs.includes(cpf.replace(/\D/g, ''))) {
-                document.getElementById('errorCpf').textContent = 'Este CPF já foi cadastrado';
-                document.getElementById('errorCpf').classList.remove('hidden');
-                hasError = true;
             }
 
-            if (!validateTelefone(telefone)) {
-                document.getElementById('errorTelefone').textContent = 'Telefone inválido';
-                document.getElementById('errorTelefone').classList.remove('hidden');
+            const cpfNumeros = cpf.replace(/\D/g, '');
+            if (cpfsCadastrados.includes(cpfNumeros)) {
+                document.getElementById('errorCpf').textContent = 'Este CPF já foi cadastrado';
+                document.getElementById('errorCpf').classList.remove('hidden');
                 hasError = true;
             }
 
@@ -323,17 +307,25 @@
                 hasError = true;
             }
 
+            if (!lgpdCheck) {
+                document.getElementById('errorLgpd').textContent = 'Você precisa concordar com o tratamento dos dados';
+                document.getElementById('errorLgpd').classList.remove('hidden');
+                hasError = true;
+            }
+
             if (hasError) return;
 
             this.disabled = true;
             this.textContent = 'Enviando...';
+
+            const municipioFinal = municipioSelecionado === 'Instituição' ? nomeInstituicao : municipioSelecionado;
 
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = SCRIPT_URL;
             form.target = 'hidden_iframe';
             
-            const fields = { municipio, nomeCompleto, cargo, cpf, telefone, email };
+            const fields = { municipio: municipioFinal, nomeCompleto, cargo, cpf, email };
             for (const [key, value] of Object.entries(fields)) {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -358,9 +350,11 @@
                 document.getElementById('nomeCompleto').value = '';
                 document.getElementById('cargo').value = '';
                 document.getElementById('cpf').value = '';
-                document.getElementById('telefone').value = '';
                 document.getElementById('email').value = '';
                 document.getElementById('municipio').value = '';
+                document.getElementById('nomeInstituicao').value = '';
+                document.getElementById('lgpdCheck').checked = false;
+                document.getElementById('campoInstituicao').classList.add('hidden');
                 document.getElementById('representanteFields').classList.add('hidden');
                 
                 this.disabled = false;
